@@ -1,8 +1,11 @@
 package Unit5.Timer;
 
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import java.util.Timer;
@@ -83,7 +86,13 @@ public class TimerComponent {
             
             // System.out.println(this.length);
             timerTask = new PomodoroTimerTask(this.length, timeElapsed -> timeElapsedLabel.setText(secondsToTimeString(this.length - timeElapsed)), () -> {
+            TimerApp.background = new Background(new BackgroundFill(Color.GREEN, null, null));
+            TimerApp.container.setBackground(TimerApp.background);
+            
+            timerTask = new PomodoroTimerTask(length, timeElapsed -> timeElapsedLabel.setText(secondsToTimeString(length - timeElapsed)), () -> {
               paused = true;
+              TimerApp.background = new Background(new BackgroundFill(Color.RED, null, null));
+              TimerApp.container.setBackground(TimerApp.background);
               startPauseButton.setText("Start");
             });
             // timerTask = new PomodoroTimerTask(length, timeElapsed -> System.out.println("hii " + timeElapsed), () -> {});
