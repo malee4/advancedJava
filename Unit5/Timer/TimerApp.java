@@ -3,19 +3,12 @@ package Unit5.Timer;
 import javafx.application.Application;
 import javafx.geometry.*;
 import javafx.stage.Stage;
+import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 public class TimerApp extends Application{
-    private Color color = Color.WHITE;
-    // private Background background = new Background(new BackgroundFill(color));
-    
-
+  
     @Override
     public void start(Stage primaryStage) {
         VBox container = new VBox(20);
@@ -23,8 +16,7 @@ public class TimerApp extends Application{
         container.setPadding(padding);
 
         // create the timer
-        VBox timer = new TimerComponent(30).getContainer();
-        timer.setAlignment(Pos.CENTER);
+        Node timer = new TimerComponent().render();
 
         // collect and display the tasks
         VBox taskList = new Tasks().getContainer();
