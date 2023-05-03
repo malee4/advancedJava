@@ -5,10 +5,12 @@ import javafx.geometry.*;
 import javafx.stage.Stage;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 public class TimerApp extends Application{
-    private Color color = Color.WHITE;
     public static Background background = new Background(new BackgroundFill(Color.RED, null, null));
     public static VBox container = new VBox(20);
     
@@ -19,8 +21,7 @@ public class TimerApp extends Application{
         container.setPadding(padding);
 
         // create the timer
-        VBox timer = new TimerComponent(5).getContainer();
-        timer.setAlignment(Pos.CENTER);
+        Node timer = new TimerComponent().render();
 
         // collect and display the tasks
         VBox taskList = new Tasks().getContainer();

@@ -11,17 +11,10 @@ import javafx.scene.control.Label;
 import java.util.Timer;
 
 public class TimerComponent {
-    private PomodoroTimerTask timerTask;
-    private Timer timer = new Timer();
-
-    private int length = 25 * 60;
-    private boolean paused = true;
-    private TimerMode mode = TimerMode.WORK;
-
     public enum TimerMode {
       WORK,
       BREAK;
-      
+
       @Override
       public String toString() {
         switch (this) {
@@ -41,9 +34,23 @@ public class TimerComponent {
           case BREAK:
             return 5;
           default:
-            return 5;
+            return 0;
         }
       }
+    }
+    
+    private PomodoroTimerTask timerTask;
+    private Timer timer = new Timer();
+
+    private int length = 25 * 60;
+    private boolean paused = true;
+    private TimerMode mode = TimerMode.WORK;
+
+    private String secondsToTimeString(int seconds) {
+      int minutes = seconds / 60;
+      int secondsRemainder = seconds % 60;
+
+      return String.format("%02d", minutes) + ":" + String.format("%02d", secondsRemainder);
     }
 
     private VBox container = new VBox(10);
@@ -74,6 +81,9 @@ public class TimerComponent {
           timerTitleLabel.setText(this.mode.toString());
           startPauseButton.setText("Start");
           paused = true;
+
+          TimerApp.background = new Background(new BackgroundFill(Color.RED, null, null));
+          TimerApp.container.setBackground(TimerApp.background);
           
           if (timerTask != null)
             timerTask.cancel();
@@ -84,8 +94,8 @@ public class TimerComponent {
             startPauseButton.setText("Pause");
             paused = false;
             
-            // System.out.println(this.length);
-            timerTask = new PomodoroTimerTask(this.length, timeElapsed -> timeElapsedLabel.setText(secondsToTimeString(this.length - timeElapsed)), () -> {
+            timerTask = new PomodoroTimerTask(this.length, timeElapsed -> timeElapsedLabel.setText(secondsToTimeString(this.length - timeElapsed)), () -> {});
+            
             TimerApp.background = new Background(new BackgroundFill(Color.GREEN, null, null));
             TimerApp.container.setBackground(TimerApp.background);
             
@@ -112,13 +122,6 @@ public class TimerComponent {
 
     public int getLength() {
         return length;
-    }
-
-    private String secondsToTimeString(int seconds) {
-      int minutes = seconds / 60;
-      int secondsRemainder = seconds % 60;
-
-      return String.format("%02d", minutes) + ":" + String.format("%02d", secondsRemainder);
     }
 
     public Node render() {
