@@ -19,6 +19,7 @@ public class Tasks {
         ScrollPane s1 = new ScrollPane();
         s1.setPrefSize(120, 120);
         s1.setContent(taskContainer);
+        s1.getStyleClass().add("tasks");
 
         Button enter = new Button("Enter");
         enter.setAlignment(Pos.CENTER);

@@ -13,7 +13,7 @@ import javafx.scene.paint.Color;
 
 public class TimerApp extends Application{
     private Color color = Color.WHITE;
-    public static Background background = new Background(new BackgroundFill(Color.RED, null, null));
+    //public static Background background = new Background(new BackgroundFill(Color.WHITE, null, null));
     public static VBox container = new VBox(20);
     
     @Override
@@ -31,9 +31,12 @@ public class TimerApp extends Application{
 
         container.getChildren().addAll(timer, taskList);
 
-        container.setBackground(background);
+        container.getStyleClass().add("vbox");
+
+        //container.setBackground(background);
 
         Scene scn = new Scene(container, 400, 400);
+        scn.getStylesheets().add("Unit5/Timer/TimerAppStyleSheet.css");
         primaryStage.setTitle("Focus Timer");
         primaryStage.setScene(scn);
         primaryStage.show();

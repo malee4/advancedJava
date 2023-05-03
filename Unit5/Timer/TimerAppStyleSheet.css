@@ -1,0 +1,11 @@
+.root {
+    -fx-font-family: "Verdana", sans-serif; 
+}
+
+.vbox {
+    -fx-background-color: Gainsboro;
+}
+
+.tasks {
+    -fx-background-color: GhostWhite;
+}
