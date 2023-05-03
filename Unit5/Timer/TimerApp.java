@@ -1,27 +1,37 @@
 package Unit5.Timer;
 
 import javafx.application.Application;
+import javafx.geometry.*;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
-
+import javafx.scene.control.ScrollPane;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
-import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 public class TimerApp extends Application{
+    private Color color = Color.WHITE;
+    // private Background background = new Background(new BackgroundFill(color));
+    
+
     @Override
     public void start(Stage primaryStage) {
         VBox container = new VBox(20);
+        Insets padding = new Insets(30); // aesthetics
+        container.setPadding(padding);
 
         // create the timer
         VBox timer = new TimerComponent(30).getContainer();
-
+        timer.setAlignment(Pos.CENTER);
 
         // collect and display the tasks
-        // VBox taskList = new Tasks().getContainer();
+        VBox taskList = new Tasks().getContainer();
 
-        container.getChildren().addAll(timer);
+        container.getChildren().addAll(timer, taskList);
 
-        Scene scn = new Scene(container, 400, 300);
+        Scene scn = new Scene(container, 400, 400);
         primaryStage.setTitle("Focus Timer");
         primaryStage.setScene(scn);
         primaryStage.show();

@@ -3,6 +3,8 @@ package Unit5.Timer;
 import java.util.TimerTask;
 import java.util.function.Consumer;
 
+import javafx.application.Platform;
+
 class PomodoroTimerTask extends TimerTask {
   private int secondsLength;
   private int secondsElapsed = 0;
@@ -23,12 +25,14 @@ class PomodoroTimerTask extends TimerTask {
 
   @Override
   public void run() {
-    secondsElapsed += 1;
-    secondsCallback.accept(secondsElapsed);
-    
-    if (secondsElapsed == secondsLength) {
-      completedCallback.run();
-      cancel();
+    Platform.runLater(() -> {
+      secondsElapsed += 1;
+      secondsCallback.accept(secondsElapsed);
+      
+      if (secondsElapsed == secondsLength) {
+        completedCallback.run();
+        cancel();
     }
+    });
   }
 }

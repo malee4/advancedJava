@@ -47,8 +47,12 @@ public class TimerComponent {
             startPauseButton.setText("Pause");
             paused = false;
 
-            // timerTask = new PomodoroTimerTask(length, timeElapsed -> timeElapsedLabel.setText(secondsToTimeString(length - timeElapsed)), () -> {});
-            timerTask = new PomodoroTimerTask(length, timeElapsed -> System.out.println("hii " + timeElapsed), () -> {});
+            timerTask = new PomodoroTimerTask(length, timeElapsed -> timeElapsedLabel.setText(secondsToTimeString(length - timeElapsed)), () -> {
+              paused = true;
+              startPauseButton.setText("Start");
+            });
+            // timerTask = new PomodoroTimerTask(length, timeElapsed -> System.out.println("hii " + timeElapsed), () -> {});
+            timer.schedule(timerTask, 1000, 1000);
 
           } else {
             startPauseButton.setText("Start");
@@ -69,7 +73,7 @@ public class TimerComponent {
       int minutes = seconds / 60;
       int secondsRemainder = seconds % 60;
 
-      return minutes + ":" + secondsRemainder;
+      return String.format("%02d", minutes) + ":" + String.format("%02d", secondsRemainder);
     }
 
     public VBox getContainer() {
