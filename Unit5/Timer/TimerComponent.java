@@ -84,7 +84,7 @@ public class TimerComponent {
           startPauseButton.setText("Start");
           paused = true;
 
-          TimerApp.background = new Background(new BackgroundFill(Color.PINK, null, null));
+          TimerApp.background = new Background(new BackgroundFill(Color.GAINSBORO, null, null));
           TimerApp.container.setBackground(TimerApp.background);
           
           if (timerTask != null)
@@ -98,12 +98,12 @@ public class TimerComponent {
             
             timerTask = new PomodoroTimerTask(this.length, timeElapsed -> timeElapsedLabel.setText(secondsToTimeString(this.length - timeElapsed)), () -> {});
             
-            TimerApp.background = new Background(new BackgroundFill(Color.GREEN, null, null));
+            TimerApp.background = new Background(new BackgroundFill(Color.LIGHTGREEN, null, null));
             TimerApp.container.setBackground(TimerApp.background);
             
             timerTask = new PomodoroTimerTask(length, timeElapsed -> timeElapsedLabel.setText(secondsToTimeString(length - timeElapsed)), () -> {
               paused = true;
-              TimerApp.background = new Background(new BackgroundFill(Color.RED, null, null));
+              TimerApp.background = new Background(new BackgroundFill(Color.PINK, null, null));
               TimerApp.container.setBackground(TimerApp.background);
               startPauseButton.setText("Start");
             });

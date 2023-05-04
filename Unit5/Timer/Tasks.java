@@ -29,7 +29,11 @@ public class Tasks {
             if (inputText.length() != 0) {
                 CheckBox check = new CheckBox(inputText);
                 check.setOnAction(c -> {
-                    taskCounter--;
+                    if (check.isSelected())
+                      taskCounter--;
+                    else
+                      taskCounter++;
+                
                     tasksRemainingText.setText("Tasks remaining: " + taskCounter);
                 });
 
