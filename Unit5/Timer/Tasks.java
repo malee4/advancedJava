@@ -42,7 +42,7 @@ public class Tasks {
                 tasksRemainingText.setText("Tasks remaining: " + taskCounter);
 
                 // Label taskText = new Label(inputText);
-                check.setMaxWidth(250);
+                check.setMaxWidth(390);
                 check.setWrapText(true);
                 
                 taskContainer.getChildren().add(check);

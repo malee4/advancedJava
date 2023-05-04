@@ -17,7 +17,7 @@ public class TimerApp extends Application{
     @Override
     public void start(Stage primaryStage) {
         
-        Insets padding = new Insets(3); // aesthetics
+        Insets padding = new Insets(30); // aesthetics
         container.setPadding(padding);
 
         // create the timer

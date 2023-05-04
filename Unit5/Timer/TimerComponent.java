@@ -30,9 +30,9 @@ public class TimerComponent {
       public int getLength() {
         switch (this) {
           case WORK:
-            return 25;
+            return 25 * 60;
           case BREAK:
-            return 5;
+            return 5 * 60;
           default:
             return 0;
         }
@@ -93,7 +93,7 @@ public class TimerComponent {
         
         startPauseButton.setOnAction(e -> {
           if (paused) {
-            startPauseButton.setText("Pause");
+            startPauseButton.setText("Reset");
             paused = false;
             
             timerTask = new PomodoroTimerTask(this.length, timeElapsed -> timeElapsedLabel.setText(secondsToTimeString(this.length - timeElapsed)), () -> {});
@@ -112,9 +112,12 @@ public class TimerComponent {
 
           } else {
             startPauseButton.setText("Start");
+           
             paused = true;
 
             timerTask.cancel();
+            timeElapsedLabel.setText(secondsToTimeString(length));
+            
           }
         });
 
