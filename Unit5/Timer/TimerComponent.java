@@ -43,12 +43,18 @@ public class TimerComponent {
     private Button startPauseButton = new Button("Start");
 
     public TimerComponent(int length) {
+        this.timerTitleLabel.getStyleClass().add("title");
         this.length = length;
+
+        
         
         startPauseButton.setOnAction(e -> {
+          
           if (paused) {
             startPauseButton.setText("Pause");
             paused = false;
+            // TimerApp.container.getStyleClass().clear();
+            TimerApp.container.getStyleClass().add("vbox");
             // TimerApp.background = new Background(new BackgroundFill(Color.GREEN, null, null));
             // TimerApp.container.setBackground(TimerApp.background);
 
@@ -56,6 +62,8 @@ public class TimerComponent {
               paused = true;
               // TimerApp.background = new Background(new BackgroundFill(Color.RED, null, null));
               // TimerApp.container.setBackground(TimerApp.background);
+              // TimerApp.container.getStyleClass().clear();
+              TimerApp.container.getStyleClass().add("done");
               startPauseButton.setText("Start");
             });
             // timerTask = new PomodoroTimerTask(length, timeElapsed -> System.out.println("hii " + timeElapsed), () -> {});

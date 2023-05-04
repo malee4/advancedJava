@@ -6,6 +6,15 @@
     -fx-background-color: Gainsboro;
 }
 
+.done {
+    -fx-background-color: Aquamarine;
+}
+
 .tasks {
     -fx-background-color: GhostWhite;
+}
+
+.title {
+    -fx-font-size: 20pt;
+    -fx-font-weight: bolder;
 }
