@@ -39,12 +39,23 @@ public class Grid implements UIElement {
                     return 10;
             }
         }
+
+        public double getProbability() {
+            switch(this) {
+                case HARD:
+                    return 99.0 / 576.0;
+                case MEDIUM: 
+                    return 40.0 / 324.0;
+                default:
+                    return 10.0 / 100.0;
+            }
+        }
     }
     
-    public Grid(int length, double p) throws Exception {
-        this.length = length;
-        this.p = p;
-
+    public Grid(Level type) throws Exception {
+        this.length = type.getLength();
+        this.p = type.getProbability();
+        
         // generate the grid of blocks
         grid = new GridPane();
 
