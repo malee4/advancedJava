@@ -31,6 +31,8 @@ public class Block implements UIElement {
         System.out.println("Error loading block image assets: " + e);
         System.exit(0);
       }
+
+      blockButton.set
     }
     
     public void setAdjacentMines(int adjacentMines) {
