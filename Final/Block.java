@@ -32,7 +32,7 @@ public class Block implements UIElement {
         System.exit(0);
       }
 
-      blockButton.set
+    //   blockButton.set
     }
     
     public void setAdjacentMines(int adjacentMines) {

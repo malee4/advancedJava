@@ -8,6 +8,7 @@ public class Grid implements UIElement {
     private final int length;
     private final GridPane grid;
     private final double p; // probability of having a mine on the grid
+    private Level level;
     private int minesRemaining = 0;
 
     public enum Level {
@@ -55,12 +56,13 @@ public class Grid implements UIElement {
     public Grid(Level type) throws Exception {
         this.length = type.getLength();
         this.p = type.getProbability();
-        
+        this.level = type;
+
         // generate the grid of blocks
         grid = new GridPane();
 
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
+        for (int c = 0; c < length; c++) {
+            for (int r = 0; r < length; r++) {
                 boolean isMine = false;
                 if (Math.random() <= p) {
                     isMine = true;
@@ -68,7 +70,7 @@ public class Grid implements UIElement {
                 }
 
                 Block b = new Block(isMine);
-                grid.add(b.render(), i, j);
+                grid.add(b.render(), c, r);
             }
         }
     }
@@ -79,6 +81,14 @@ public class Grid implements UIElement {
 
     public int getLength() {
         return length;
+    }
+
+    public String getLevel() {
+        return level.toString();
+    }
+
+    public void setLevel(Level newLevel) {
+        this.level = newLevel;
     }
 
     @Override
