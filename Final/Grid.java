@@ -91,6 +91,10 @@ public class Grid implements UIElement {
         this.level = newLevel;
     }
 
+    public Block getBlock(int r, int c) {
+        
+    }
+
     @Override
     public Node render() {
         return grid;
