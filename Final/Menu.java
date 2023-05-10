@@ -19,16 +19,31 @@ public class Menu implements UIElement {
         // create the UI
         MenuItem easy = new MenuItem("Easy");
         easy.setOnAction(e-> {
-            Minesweeper.getGrid().setLevel(Grid.Level.EASY);
+            try {
+                Minesweeper.getGrid().setLevel(Grid.Level.EASY);
+            } catch (Exception e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         });
 
         MenuItem medium = new MenuItem("Medium");
         medium.setOnAction(e-> {
-            Minesweeper.getGrid().setLevel(Grid.Level.MEDIUM);
+            try {
+                Minesweeper.getGrid().setLevel(Grid.Level.MEDIUM);
+            } catch (Exception e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         });
         MenuItem hard = new MenuItem("Hard");
         hard.setOnAction(e-> {
-            Minesweeper.getGrid().setLevel(Grid.Level.HARD);
+            try {
+                Minesweeper.getGrid().setLevel(Grid.Level.HARD);
+            } catch (Exception e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
         });
 
         levelSelector = new MenuButton("Levels", null, easy, medium, hard);

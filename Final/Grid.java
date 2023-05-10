@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.function.BiFunction;
 
 public class Grid implements UIElement {
-    private final int length;
+    private int length;
     private final GridPane grid;
     private final double p; // probability of having a mine on the grid
     private Level level;
@@ -40,6 +40,8 @@ public class Grid implements UIElement {
                     return 24;
                 case MEDIUM:
                     return 18;
+                case EASY:
+                    return 10;
                 default:
                     return 10;
             }
@@ -57,7 +59,9 @@ public class Grid implements UIElement {
         }
     }
 
-    public void generateNew() throws Exception {
+    public void generateNew(Level level) throws Exception {
+        grid.getChildren().clear();
+
         for (int c = 0; c < length; c++) {
             for (int r = 0; r < length; r++) {
                 boolean isMine = false;
@@ -72,15 +76,14 @@ public class Grid implements UIElement {
                     Minesweeper.getGame().setMovesMade(Minesweeper.getGame().getMovesMade() + 1); // update the moves counter
                     if (wasMine) Minesweeper.getGame().gameOver();
                 }, level);
-                b.setAdjacentMines(1);
+                b.setAdjacentMines(-1);
                 blockCollection.add(b);
                 grid.add(b.render(), c, r); // column major order
             }
         }
 
         // Set adjacent mines
-        BiFunction<Integer, Integer, Block> getBlock = (column, row) -> blockCollection.get(column * length + row);
-        BiFunction<Integer, Integer, Integer> isMine = (column, row) -> getBlock(row, column).getIsMine() ? 1 : 0;
+        BiFunction<Integer, Integer, Integer> isMine = (column, row) -> getBlock(column, row).getIsMine() ? 1 : 0;
         for (int c = 0; c < length; c++) {
             for (int r = 0; r < length; r++) {
                 if ((c > 0 && c < length - 1) && (r > 0 && r < length - 1)) {
@@ -100,8 +103,53 @@ public class Grid implements UIElement {
                     adjacentMineCount += isMine.apply(c + 0, r + 1);
                     adjacentMineCount += isMine.apply(c + 1, r + 1);
 
-                    getBlock.apply(c, r).setAdjacentMines(adjacentMineCount);
+                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
+                } else if (c == 0 && r == 0) {
+                    int adjacentMineCount = 0;
+
+                    // row current
+                    adjacentMineCount += isMine.apply(c + 1, r + 0);
+
+                    // row below
+                    adjacentMineCount += isMine.apply(c + 0, r + 1);
+                    adjacentMineCount += isMine.apply(c + 1, r + 1);
+
+                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
+                } else if (c == length - 1 && r == 0) {
+                    int adjacentMineCount = 0;
+
+                    // row current
+                    adjacentMineCount += isMine.apply(c - 1, r + 0);
+
+                    // row below
+                    adjacentMineCount += isMine.apply(c + 0, r + 1);
+                    adjacentMineCount += isMine.apply(c - 1, r + 1);
+
+                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
+                } else if (c == length - 1 && r == length - 1) {
+                    int adjacentMineCount = 0;
+
+                    // row current
+                    adjacentMineCount += isMine.apply(c - 1, r + 0);
+
+                    // row above
+                    adjacentMineCount += isMine.apply(c + 0, r - 1);
+                    adjacentMineCount += isMine.apply(c - 1, r - 1);
+
+                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
+                } else if (c == 0 && r == length - 1) {
+                    int adjacentMineCount = 0;
+
+                    // row current
+                    adjacentMineCount += isMine.apply(c + 1, r + 0);
+
+                    // row above
+                    adjacentMineCount += isMine.apply(c + 0, r - 1);
+                    adjacentMineCount += isMine.apply(c + 1, r - 1);
+
+                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
                 }
+                // } else if ()
             }
         }
     }
@@ -114,7 +162,7 @@ public class Grid implements UIElement {
         // generate the grid of blocks
         grid = new GridPane();
 
-        generateNew();
+        generateNew(type);
     }
 
     public int getMinesRemaining() {
@@ -129,11 +177,14 @@ public class Grid implements UIElement {
         return level.toString();
     }
 
-    public void setLevel(Level newLevel) {
+    public void setLevel(Level newLevel) throws Exception {
+        if (this.level.equals(newLevel)) return;
         this.level = newLevel;
+        this.length = level.getLength();
+        generateNew(newLevel);
     }
 
-    public Block getBlock(int r, int c) {
+    public Block getBlock(int c, int r) {
         int index = c * length + r;
         return blockCollection.get(index);
     }

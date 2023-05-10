@@ -2,6 +2,7 @@ package Final;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.image.*;
 import javafx.scene.layout.StackPane;
@@ -27,9 +28,9 @@ public class Block implements UIElement {
     private Integer adjacentMines;
 
     // dimensions for image
-    private static final int EASY_IMG_DIM = 50;
-    private static final int MEDIUM_IMG_DIM = 30;
-    private static final int HARD_IMG_DIM = 10;
+    private static final int EASY_IMG_DIM = 15;
+    private static final int MEDIUM_IMG_DIM = 10;
+    private static final int HARD_IMG_DIM = 5;
 
     public Block(boolean isMine, Consumer<Boolean> onReveal, Grid.Level level) {
       this.isMine = isMine;
