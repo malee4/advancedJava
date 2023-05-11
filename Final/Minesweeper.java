@@ -5,6 +5,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.application.Application;
+import javafx.geometry.Pos;
 
 public class Minesweeper extends Application {
     private static Game game;
@@ -15,10 +16,11 @@ public class Minesweeper extends Application {
     public void start(Stage primaryStage) throws Exception {
         game = new Game(Grid.Level.EASY);
         gameContainer = new VBox(game.render());
+        gameContainer.setAlignment(Pos.CENTER);
         stage = primaryStage;
         // grid = new Grid(Grid.Level.EASY);
         // gameContainer = new VBox(grid.render());
-        scene = new Scene(gameContainer, 600, 650);
+        scene = new Scene(gameContainer, 400, 350);
         stage.setScene(scene);
         stage.show();
     }

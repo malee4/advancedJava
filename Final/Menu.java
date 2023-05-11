@@ -51,14 +51,14 @@ public class Menu implements UIElement {
                 // Minesweeper.refresh();
                 levelSelector.setText("Hard");
                 Minesweeper.getGrid().setLevel(Grid.Level.HARD);
-                System.out.println("setting level");
+                // System.out.println("setting level");
             } catch (Exception e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         });
 
-        levelSelector = new MenuButton("", null, easy, medium, hard);
+        levelSelector = new MenuButton("Easy", null, easy, medium, hard);
         // levelSelector.setAlignment(Pos.CENTER);
 
         vContainer.getChildren().addAll(title, menuInstructions, levelSelector);

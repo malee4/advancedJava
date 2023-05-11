@@ -1,5 +1,6 @@
 package Final;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
@@ -239,6 +240,7 @@ public class Grid implements UIElement {
 
         // generate the grid of blocks
         grid = new GridPane();
+        grid.setAlignment(Pos.CENTER);
 
         generateNew(type);
     }
