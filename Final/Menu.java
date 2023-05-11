@@ -20,7 +20,11 @@ public class Menu implements UIElement {
         MenuItem easy = new MenuItem("Easy");
         easy.setOnAction(e-> {
             try {
+                levelSelector.setText("Easy");
                 Minesweeper.getGrid().setLevel(Grid.Level.EASY);
+                System.out.println("setting level");
+                // Minesweeper.setGame(new Game(Grid.Level.EASY));
+                // Minesweeper.refresh();
             } catch (Exception e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -30,7 +34,11 @@ public class Menu implements UIElement {
         MenuItem medium = new MenuItem("Medium");
         medium.setOnAction(e-> {
             try {
+                levelSelector.setText("Medium");
                 Minesweeper.getGrid().setLevel(Grid.Level.MEDIUM);
+                System.out.println("setting level");
+                // Minesweeper.setGame(new Game(Grid.Level.MEDIUM));
+                // Minesweeper.refresh();
             } catch (Exception e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -39,14 +47,18 @@ public class Menu implements UIElement {
         MenuItem hard = new MenuItem("Hard");
         hard.setOnAction(e-> {
             try {
+                // Minesweeper.setGame(new Game(Grid.Level.HARD));
+                // Minesweeper.refresh();
+                levelSelector.setText("Hard");
                 Minesweeper.getGrid().setLevel(Grid.Level.HARD);
+                System.out.println("setting level");
             } catch (Exception e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
         });
 
-        levelSelector = new MenuButton("Levels", null, easy, medium, hard);
+        levelSelector = new MenuButton("", null, easy, medium, hard);
         // levelSelector.setAlignment(Pos.CENTER);
 
         vContainer.getChildren().addAll(title, menuInstructions, levelSelector);

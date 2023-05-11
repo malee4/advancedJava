@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 
 public class Grid implements UIElement {
     private int length;
-    private final GridPane grid;
+    private GridPane grid;
     private final double p; // probability of having a mine on the grid
     private Level level;
     private int minesRemaining = 0;
@@ -60,7 +60,10 @@ public class Grid implements UIElement {
     }
 
     public void generateNew(Level level) throws Exception {
+        // clear existing storage
         grid.getChildren().clear();
+        this.blockCollection.clear();
+        this.length = level.getLength();
 
         for (int c = 0; c < length; c++) {
             for (int r = 0; r < length; r++) {
@@ -83,142 +86,151 @@ public class Grid implements UIElement {
         }
 
         // Set adjacent mines
-        BiFunction<Integer, Integer, Integer> isMine = (column, row) -> getBlock(column, row).getIsMine() ? 1 : 0;
         for (int c = 0; c < length; c++) {
             for (int r = 0; r < length; r++) {
-                // inner blocks
-                if ((c > 0 && c < length - 1) && (r > 0 && r < length - 1)) {
-                    int adjacentMineCount = 0;
-                    
-                    // row above
-                    adjacentMineCount += isMine.apply(c - 1, r - 1);
-                    adjacentMineCount += isMine.apply(c + 0, r - 1);
-                    adjacentMineCount += isMine.apply(c + 1, r - 1);
-
-                    // row current
-                    adjacentMineCount += isMine.apply(c - 1, r + 0);
-                    adjacentMineCount += isMine.apply(c + 1, r + 0);
-
-                    // row below
-                    adjacentMineCount += isMine.apply(c - 1, r + 1);
-                    adjacentMineCount += isMine.apply(c + 0, r + 1);
-                    adjacentMineCount += isMine.apply(c + 1, r + 1);
-
-                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
-                // upper left corner
-                } else if (c == 0 && r == 0) {
-                    int adjacentMineCount = 0;
-
-                    // row current
-                    adjacentMineCount += isMine.apply(c + 1, r + 0);
-
-                    // row below
-                    adjacentMineCount += isMine.apply(c + 0, r + 1);
-                    adjacentMineCount += isMine.apply(c + 1, r + 1);
-
-                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
-                // upper right corner
-                } else if (c == length - 1 && r == 0) {
-                    int adjacentMineCount = 0;
-
-                    // row current
-                    adjacentMineCount += isMine.apply(c - 1, r + 0);
-
-                    // row below
-                    adjacentMineCount += isMine.apply(c + 0, r + 1);
-                    adjacentMineCount += isMine.apply(c - 1, r + 1);
-
-                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
-                // lower right corner
-                } else if (c == length - 1 && r == length - 1) {
-                    int adjacentMineCount = 0;
-
-                    // row current
-                    adjacentMineCount += isMine.apply(c - 1, r + 0);
-
-                    // row above
-                    adjacentMineCount += isMine.apply(c + 0, r - 1);
-                    adjacentMineCount += isMine.apply(c - 1, r - 1);
-
-                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
-                // lower left corner
-                } else if (c == 0 && r == length - 1) {
-                    int adjacentMineCount = 0;
-
-                    // row current
-                    adjacentMineCount += isMine.apply(c + 1, r + 0);
-
-                    // row above
-                    adjacentMineCount += isMine.apply(c + 0, r - 1);
-                    adjacentMineCount += isMine.apply(c + 1, r - 1);
-
-                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
-                } else if (c == 0) {
-                    int adjacentMineCount = 0; 
-
-                    // row above
-                    adjacentMineCount += isMine.apply(c + 0, r - 1);
-                    adjacentMineCount += isMine.apply(c + 1, r - 1);
-
-                    // row current
-                    adjacentMineCount += isMine.apply(c + 1, r + 0);
-                    
-                    // row below
-                    adjacentMineCount += isMine.apply(c + 0, r + 1);
-                    adjacentMineCount += isMine.apply(c + 1, r + 1);
-
-                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
-                } else if (c == length - 1) {
-                    int adjacentMineCount = 0; 
-
-                    // row above
-                    adjacentMineCount += isMine.apply(c + 0, r - 1);
-                    adjacentMineCount += isMine.apply(c - 1, r - 1);
-
-                    // row current
-                    adjacentMineCount += isMine.apply(c - 1, r + 0);
-                    
-                    // row below
-                    adjacentMineCount += isMine.apply(c + 0, r + 1);
-                    adjacentMineCount += isMine.apply(c - 1, r + 1);
-
-                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
-
-                // top row
-                } else if (r == 0) {
-                    int adjacentMineCount = 0; 
-
-                    // column to the left
-                    adjacentMineCount += isMine.apply(c - 1, r + 0);
-                    adjacentMineCount += isMine.apply(c - 1, r + 1);
-
-                    // column current
-                    adjacentMineCount += isMine.apply(c + 0, r + 1);
-                    
-                    // column to the right
-                    adjacentMineCount += isMine.apply(c + 1, r + 0);
-                    adjacentMineCount += isMine.apply(c + 1, r + 1);
-
-                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
-                } else {
-                    int adjacentMineCount = 0;
-
-                    // column to the left
-                    adjacentMineCount += isMine.apply(c - 1, r + 0);
-                    adjacentMineCount += isMine.apply(c - 1, r - 1);
-
-                    // column current
-                    adjacentMineCount += isMine.apply(c + 0, r - 1);
-                    
-                    // column to the right
-                    adjacentMineCount += isMine.apply(c + 1, r + 0);
-                    adjacentMineCount += isMine.apply(c + 1, r - 1);
-
-                    getBlock(c, r).setAdjacentMines(adjacentMineCount);
-                }
+                calculateAdjacentMines(c, r);
             }
         }
     }
+
+    public void calculateAdjacentMines(int c, int r) {
+        BiFunction<Integer, Integer, Integer> isMine = (column, row) -> getBlock(column, row).getIsMine() ? 1 : 0;
+
+        // inner blocks
+        if ((c > 0 && c < length - 1) && (r > 0 && r < length - 1)) {
+            int adjacentMineCount = 0;
+            
+            // row above
+            adjacentMineCount += isMine.apply(c - 1, r - 1);
+            adjacentMineCount += isMine.apply(c + 0, r - 1);
+            adjacentMineCount += isMine.apply(c + 1, r - 1);
+
+            // row current
+            adjacentMineCount += isMine.apply(c - 1, r + 0);
+            adjacentMineCount += isMine.apply(c + 1, r + 0);
+
+            // row below
+            adjacentMineCount += isMine.apply(c - 1, r + 1);
+            adjacentMineCount += isMine.apply(c + 0, r + 1);
+            adjacentMineCount += isMine.apply(c + 1, r + 1);
+
+            getBlock(c, r).setAdjacentMines(adjacentMineCount);
+        // upper left corner
+        } else if (c == 0 && r == 0) {
+            int adjacentMineCount = 0;
+
+            // row current
+            adjacentMineCount += isMine.apply(c + 1, r + 0);
+
+            // row below
+            adjacentMineCount += isMine.apply(c + 0, r + 1);
+            adjacentMineCount += isMine.apply(c + 1, r + 1);
+
+            getBlock(c, r).setAdjacentMines(adjacentMineCount);
+        // upper right corner
+        } else if (c == length - 1 && r == 0) {
+            int adjacentMineCount = 0;
+
+            // row current
+            adjacentMineCount += isMine.apply(c - 1, r + 0);
+
+            // row below
+            adjacentMineCount += isMine.apply(c + 0, r + 1);
+            adjacentMineCount += isMine.apply(c - 1, r + 1);
+
+            getBlock(c, r).setAdjacentMines(adjacentMineCount);
+        // lower right corner
+        } else if (c == length - 1 && r == length - 1) {
+            int adjacentMineCount = 0;
+
+            // row current
+            adjacentMineCount += isMine.apply(c - 1, r + 0);
+
+            // row above
+            adjacentMineCount += isMine.apply(c + 0, r - 1);
+            adjacentMineCount += isMine.apply(c - 1, r - 1);
+
+            getBlock(c, r).setAdjacentMines(adjacentMineCount);
+        // lower left corner
+        } else if (c == 0 && r == length - 1) {
+            int adjacentMineCount = 0;
+
+            // row current
+            adjacentMineCount += isMine.apply(c + 1, r + 0);
+
+            // row above
+            adjacentMineCount += isMine.apply(c + 0, r - 1);
+            adjacentMineCount += isMine.apply(c + 1, r - 1);
+
+            getBlock(c, r).setAdjacentMines(adjacentMineCount);
+        } else if (c == 0) {
+            int adjacentMineCount = 0; 
+
+            // row above
+            adjacentMineCount += isMine.apply(c + 0, r - 1);
+            adjacentMineCount += isMine.apply(c + 1, r - 1);
+
+            // row current
+            adjacentMineCount += isMine.apply(c + 1, r + 0);
+            
+            // row below
+            adjacentMineCount += isMine.apply(c + 0, r + 1);
+            adjacentMineCount += isMine.apply(c + 1, r + 1);
+
+            getBlock(c, r).setAdjacentMines(adjacentMineCount);
+        } else if (c == length - 1) {
+            int adjacentMineCount = 0; 
+
+            // row above
+            adjacentMineCount += isMine.apply(c + 0, r - 1);
+            adjacentMineCount += isMine.apply(c - 1, r - 1);
+
+            // row current
+            adjacentMineCount += isMine.apply(c - 1, r + 0);
+            
+            // row below
+            adjacentMineCount += isMine.apply(c + 0, r + 1);
+            adjacentMineCount += isMine.apply(c - 1, r + 1);
+
+            getBlock(c, r).setAdjacentMines(adjacentMineCount);
+
+        // top row
+        } else if (r == 0) {
+            int adjacentMineCount = 0; 
+
+            // column to the left
+            adjacentMineCount += isMine.apply(c - 1, r + 0);
+            adjacentMineCount += isMine.apply(c - 1, r + 1);
+
+            // column current
+            adjacentMineCount += isMine.apply(c + 0, r + 1);
+            
+            // column to the right
+            adjacentMineCount += isMine.apply(c + 1, r + 0);
+            adjacentMineCount += isMine.apply(c + 1, r + 1);
+
+            getBlock(c, r).setAdjacentMines(adjacentMineCount);
+        } else {
+            int adjacentMineCount = 0;
+
+            // column to the left
+            adjacentMineCount += isMine.apply(c - 1, r + 0);
+            adjacentMineCount += isMine.apply(c - 1, r - 1);
+
+            // column current
+            adjacentMineCount += isMine.apply(c + 0, r - 1);
+            
+            // column to the right
+            adjacentMineCount += isMine.apply(c + 1, r + 0);
+            adjacentMineCount += isMine.apply(c + 1, r - 1);
+
+            getBlock(c, r).setAdjacentMines(adjacentMineCount);
+        }
+    }
+
+    // public void refreshAdjacentMineCounts(int c, int r) {
+        
+    // }
     
     public Grid(Level type) throws Exception {
         this.length = type.getLength();
@@ -244,7 +256,11 @@ public class Grid implements UIElement {
     }
 
     public void setLevel(Level newLevel) throws Exception {
-        if (this.level.equals(newLevel)) return;
+        if (this.level.equals(newLevel)) {
+            System.out.println("same level");
+            return;
+        }
+
         this.level = newLevel;
         this.length = level.getLength();
         generateNew(newLevel);
