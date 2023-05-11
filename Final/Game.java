@@ -38,7 +38,7 @@ public class Game implements UIElement {
 
     // will start a new game
     public void reset() throws Exception {
-        grid.generateNew();
+        // grid.generateNew();
         setMovesMade(0);
         return;
     }
