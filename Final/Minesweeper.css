@@ -1,0 +1,29 @@
+.root {
+    text-align:center;
+    font-family:Gill Sans, sans-serif;
+}
+
+.block {
+    -fx-padding: 5;
+    -fx-background-color: #D9D9D9;
+}
+
+.mine {
+    -fx-padding: 5;
+    -fx-background-color: #FF5757;
+}
+
+.safe {
+    -fx-padding: 5;
+    -fx-background-color: #7ED957;
+}
+
+/* adjust for padding */
+.grid {
+
+}
+
+/* for controls buttons */
+.button {
+
+}

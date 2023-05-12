@@ -20,7 +20,8 @@ public class Minesweeper extends Application {
         stage = primaryStage;
         // grid = new Grid(Grid.Level.EASY);
         // gameContainer = new VBox(grid.render());
-        scene = new Scene(gameContainer, 400, 350);
+        scene = new Scene(gameContainer, 800, 800);
+        scene.getStylesheets().add("Final/Minesweeper.css");
         stage.setScene(scene);
         stage.show();
     }

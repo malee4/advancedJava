@@ -78,7 +78,9 @@ public class Grid implements UIElement {
                 Block b = new Block(isMine, wasMine -> {
                     System.out.println("Clicked mine?: " + wasMine); // for tracking purposes
                     Minesweeper.getGame().setMovesMade(Minesweeper.getGame().getMovesMade() + 1); // update the moves counter
-                    if (wasMine) Minesweeper.getGame().gameOver();
+                    if (wasMine) {
+                        Minesweeper.getGame().gameOver();
+                    }
                 }, level);
                 b.setAdjacentMines(-1);
                 blockCollection.add(b);

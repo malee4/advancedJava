@@ -37,6 +37,7 @@ public class Block implements UIElement {
       this.onReveal = onReveal;
       
       blockButton = new Button("");
+      blockButton.getStyleClass().add("block");
 
       try {
         hiddenImage = new ImageView(new Image(new FileInputStream("./Final/assets/blank.png")));
@@ -83,6 +84,12 @@ public class Block implements UIElement {
       if (revealed)
         return;
 
+      blockButton.getStyleClass().clear();
+      if (isMine) {
+        blockButton.getStyleClass().add("mine");
+      } else {
+        blockButton.getStyleClass().add("safe");
+      }
       revealed = true;
       currentImage.setImage(revealedImage.getImage());
       onReveal.accept(isMine);
