@@ -13,11 +13,11 @@ public class Game implements UIElement {
     private Label movesMadeLabel = new Label("0");
 
     private Button resetButton = new Button("Reset");
+    private Menu menu = new Menu();
 
     public Game(Grid.Level level) throws Exception {
         // create the grid
         grid = new Grid(level);
-        Menu menu = new Menu();
         resetButton.setAlignment(Pos.CENTER);
         resetButton.setOnAction(e-> {
             try {
@@ -27,8 +27,13 @@ public class Game implements UIElement {
             } 
         });
 
-        HBox bottomMenu = new HBox(10);
-        bottomMenu.getChildren().addAll(movesMadeLabel, resetButton);
+        Button help = new Button("?");
+        help.setOnAction(e-> {
+            Instructions.display();
+        });
+
+        HBox bottomMenu = new HBox(30);
+        bottomMenu.getChildren().addAll(movesMadeLabel, resetButton, help);
         bottomMenu.setAlignment(Pos.CENTER);
 
         container.getChildren().addAll(menu.getHorizontal(), grid.render(), bottomMenu);
@@ -55,6 +60,7 @@ public class Game implements UIElement {
     // will start a new game
     public void reset() throws Exception {
         grid.generateNew(Grid.Level.EASY);
+        menu.getLevelSelector().setText("Easy");
         setMovesMade(0);
         return;
     }

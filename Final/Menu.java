@@ -74,6 +74,10 @@ public class Menu implements UIElement {
         return vContainer;
     }
 
+    public MenuButton getLevelSelector() {
+        return levelSelector;
+    }
+
     public Node getHorizontal() {
         return hContainer;
     }

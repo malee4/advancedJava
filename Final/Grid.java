@@ -270,7 +270,7 @@ public class Grid implements UIElement {
 
     public void setLevel(Level newLevel) throws Exception {
         if (this.level.equals(newLevel)) {
-            System.out.println("same level");
+            // System.out.println("same level");
             return;
         }
 
@@ -287,19 +287,10 @@ public class Grid implements UIElement {
 
     // uses DFS to reveal groups of regions that are NOT adjacent to mines
     public void revealRegion(int c, int r) {
-        // Block bl = getBlock(c, r);
-        // if (!bl.getIsMine() && (bl.getIsMine() == 0)) bl.reveal();
-        // int temp = c;
-        // c = r;
-        // r = temp;
-
-        System.out.println(c + " " + r);
+        // System.out.println(c + " " + r);
 
         BiFunction<Integer, Integer, Boolean> isNotRevealedAndNotMineAndNotAdjacentToMines = (column, row) -> {
             Block block = getBlock(column, row);
-            System.out.println(block.isRevealed());
-            System.out.println(block.getIsMine());
-            System.out.println("adj mines " + block.getAdjacentMines());
             return !block.isRevealed() && !block.getIsMine() && (block.getAdjacentMines() == 0);
         };
 

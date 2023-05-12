@@ -7,18 +7,20 @@
     /* -fx-padding: 5; */
     -fx-margin: 0;
     -fx-background-color: #D9D9D9;
+    -fx-border-color: #b9b9b9;
+    -fx-border-width: 1;
     /* -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 0); */
 }
 
 .mine {
-    -fx-padding: 5;
+    /* -fx-padding: 5; */
     -fx-background-color: #FF5757;
     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 0);
 }
 
 .safe {
-    -fx-padding: 5;
-    -fx-background-color: #7ED957;
+    /* -fx-padding: 5; */
+    -fx-background-color: #acacac;
     -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 0);
 }
 

@@ -15,7 +15,7 @@ public class GameOverWindow {
         window.setMinWidth(250);
         window.setMinHeight(150);
 
-        Label gameOverMsg = new Label("Game over in " + Minesweeper.getGame().getMovesMade() + " moves!");
+        Label gameOverMsg = new Label("Game over with " + Minesweeper.getGame().getMovesMade() + " blocks revealed!");
 
         Button closeWindow = new Button("Try again");
         closeWindow.setOnAction(e-> {
