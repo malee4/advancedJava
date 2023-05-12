@@ -15,6 +15,7 @@ public class Grid implements UIElement {
     private final double p; // probability of having a mine on the grid
     private Level level;
     private int minesRemaining = 0;
+    
 
     private ArrayList<Block> blockCollection = new ArrayList<>();
 

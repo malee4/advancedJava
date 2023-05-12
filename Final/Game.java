@@ -11,6 +11,7 @@ public class Game implements UIElement {
 
     private int movesMade = 0;
     private Label movesMadeLabel = new Label("0");
+    private int numberMines = 0;
 
     private Button resetButton = new Button("Reset");
     private Menu menu = new Menu();
@@ -18,6 +19,7 @@ public class Game implements UIElement {
     public Game(Grid.Level level) throws Exception {
         // create the grid
         grid = new Grid(level);
+        numberMines = grid.getMinesRemaining();
         resetButton.setAlignment(Pos.CENTER);
         resetButton.setOnAction(e-> {
             try {
@@ -40,11 +42,17 @@ public class Game implements UIElement {
         container.setAlignment(Pos.CENTER);
     }
 
+    public void isGameWon() {
+        System.out.println("number mines: " + numberMines + " moves made: " + movesMade);
+        if (numberMines + movesMade == (int) Math.pow(grid.getLength(), 2)) 
+            GameOverWindow.display("Game won");
+    }
+
     // when game over, will open screen indicating the game has ended
     // screen will contain "reset" button
     public void gameOver() {
         System.out.println("Game over");
-        GameOverWindow.display();
+        GameOverWindow.display("Game over");
         return;
     }
 

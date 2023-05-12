@@ -9,13 +9,13 @@ import javafx.geometry.Pos;
 public class GameOverWindow {
 
 
-    public static void display() {
+    public static void display(String message) {
         Stage window = new Stage();
         window.setTitle("Game Over");
         window.setMinWidth(250);
         window.setMinHeight(150);
 
-        Label gameOverMsg = new Label("Game over with " + Minesweeper.getGame().getMovesMade() + " blocks revealed!");
+        Label gameOverMsg = new Label(message + " with " + Minesweeper.getGame().getMovesMade() + " blocks revealed!");
 
         Button closeWindow = new Button("Try again");
         closeWindow.setOnAction(e-> {

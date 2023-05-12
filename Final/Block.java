@@ -96,21 +96,22 @@ public class Block implements UIElement {
       if (revealed)
         return;
 
+      
+
       blockButton.getStyleClass().clear();
       if (isMine) {
         blockButton.getStyleClass().add("mine");
       } else {
         blockButton.getStyleClass().add("safe");
-        /* TODO use DFS to reveal adjacent empty spaces */
-        // if (adjacentMines != 0) {
-          
-        // } 
       }
       revealed = true;
 
       revealAdjacentMines();
       currentImage.setImage(revealedImage.getImage());
       onReveal.apply(getIsMine(), adjacentMines, getLocation());
+
+      Minesweeper.getGame().isGameWon();
+
     }
 
     public void revealAdjacentMines() {
