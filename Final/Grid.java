@@ -83,6 +83,11 @@ public class Grid implements UIElement {
                     }
                 }, level);
                 b.setAdjacentMines(-1);
+
+                // so the block "knows where it is"
+                b.setColumn(c);
+                b.setRow(r);
+                
                 blockCollection.add(b);
                 grid.add(b.render(), c, r); // column major order
             }
@@ -230,10 +235,6 @@ public class Grid implements UIElement {
             getBlock(c, r).setAdjacentMines(adjacentMineCount);
         }
     }
-
-    // public void refreshAdjacentMineCounts(int c, int r) {
-        
-    // }
     
     public Grid(Level type) throws Exception {
         this.length = type.getLength();
@@ -242,6 +243,8 @@ public class Grid implements UIElement {
 
         // generate the grid of blocks
         grid = new GridPane();
+        grid.setVgap(5);
+        grid.setHgap(5);
         grid.setAlignment(Pos.CENTER);
 
         generateNew(type);
@@ -273,6 +276,18 @@ public class Grid implements UIElement {
     public Block getBlock(int c, int r) {
         int index = c * length + r;
         return blockCollection.get(index);
+    }
+
+    // uses DFS to reveal groups of regions that are NOT adjacent to mines
+    public void revealRegion(int c, int r) {
+        // up
+
+        // down
+
+        // left
+
+        // right
+        return;
     }
 
     @Override

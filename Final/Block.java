@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.image.*;
 import javafx.scene.layout.StackPane;
+import javafx.util.Pair;
 
 import java.io.*;
 import java.util.function.Consumer;
@@ -26,6 +27,10 @@ public class Block implements UIElement {
     private final Label buttonLabel;
 
     private Integer adjacentMines;
+
+    // so the block "knows where it is"
+    private int c;
+    private int r;
 
     // dimensions for image
     private static final int EASY_IMG_DIM = 15;
@@ -89,6 +94,10 @@ public class Block implements UIElement {
         blockButton.getStyleClass().add("mine");
       } else {
         blockButton.getStyleClass().add("safe");
+        /* TODO use DFS to reveal adjacent empty spaces */
+        if (adjacentMines != 0) {
+
+        }
       }
       revealed = true;
       currentImage.setImage(revealedImage.getImage());
@@ -97,6 +106,18 @@ public class Block implements UIElement {
 
     public boolean getIsMine() {
       return isMine;
+    }
+
+    public void setColumn(int i) {
+      c = i;
+    }
+
+    public void setRow(int i) {
+      r = i;
+    }
+
+    public Pair<Integer, Integer> getLocation() {
+      return new Pair<>(r, c);
     }
 
     public Node render() throws Exception {
