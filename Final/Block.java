@@ -37,6 +37,9 @@ public class Block implements UIElement {
     private static final int MEDIUM_IMG_DIM = 10;
     private static final int HARD_IMG_DIM = 5;
 
+    // Button dimension
+    private static final int BUTTON_DIM = 30;
+
     public Block(boolean isMine, TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> onReveal, Grid.Level level) {
       this.isMine = isMine;
       this.onReveal = onReveal;
@@ -64,10 +67,15 @@ public class Block implements UIElement {
       currentImage.setFitHeight(imgDim);
       currentImage.setFitWidth(imgDim);
 
-      buttonLabel = new Label("0");
+      buttonLabel = new Label("");
       StackPane buttonPane = new StackPane(currentImage, buttonLabel);
 
       blockButton.setGraphic(buttonPane);
+      blockButton.setMinWidth(BUTTON_DIM);
+      blockButton.setMaxWidth(BUTTON_DIM);
+      blockButton.setMinHeight(BUTTON_DIM);
+      blockButton.setMaxHeight(BUTTON_DIM);
+      
       blockButton.setOnAction(e -> reveal());
     }
 
@@ -79,7 +87,6 @@ public class Block implements UIElement {
     
     public void setAdjacentMines(int adjacentMines) {
       this.adjacentMines = adjacentMines;
-      buttonLabel.setText(this.adjacentMines.toString());
     }
 
     // Reveals the block, showing whether or not it is a mine or an empty square.
@@ -100,8 +107,15 @@ public class Block implements UIElement {
         // } 
       }
       revealed = true;
+
+      revealAdjacentMines();
       currentImage.setImage(revealedImage.getImage());
       onReveal.apply(getIsMine(), adjacentMines, getLocation());
+    }
+
+    public void revealAdjacentMines() {
+      if (!isMine)
+        buttonLabel.setText(adjacentMines > 0 ? adjacentMines.toString() : "");
     }
 
     public boolean getIsMine() {

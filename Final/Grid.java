@@ -294,12 +294,119 @@ public class Grid implements UIElement {
             return !block.isRevealed() && !block.getIsMine() && (block.getAdjacentMines() == 0);
         };
 
+        BiFunction<Integer, Integer, Void> revealBorderBlock = (column, row) -> {
+          Block block = getBlock(column, row);
+
+          if (!block.isRevealed() && (block.getAdjacentMines() > 0))
+            block.reveal();
+
+          return null;
+        };
+
+        BiFunction<Integer, Integer, Void> revealAdjacentBorderBlocks = (column, row) -> {
+             // inner blocks
+            if ((column > 0 && column < length - 1) && (row > 0 && row < length - 1)) {              
+              // row above
+              revealBorderBlock.apply(column - 1, row - 1);
+              revealBorderBlock.apply(column + 0, row - 1);
+              revealBorderBlock.apply(column + 1, row - 1);
+
+              // row current
+              revealBorderBlock.apply(column - 1, row + 0);
+              revealBorderBlock.apply(column + 1, row + 0);
+
+              // row below
+              revealBorderBlock.apply(column - 1, row + 1);
+              revealBorderBlock.apply(column + 0, row + 1);
+              revealBorderBlock.apply(column + 1, row + 1);
+          } else if (column == 0 && row == 0) {
+              // row current
+              revealBorderBlock.apply(column + 1, row + 0);
+
+              // row below
+              revealBorderBlock.apply(column + 0, row + 1);
+              revealBorderBlock.apply(column + 1, row + 1);
+          } else if (column == length - 1 && row == 0) {
+              // row current
+              revealBorderBlock.apply(column - 1, row + 0);
+
+              // row below
+              revealBorderBlock.apply(column + 0, row + 1);
+              revealBorderBlock.apply(column - 1, row + 1);
+          } else if (column == length - 1 && row == length - 1) {
+              // row current
+              revealBorderBlock.apply(column - 1, row + 0);
+
+              // row above
+              revealBorderBlock.apply(column + 0, row - 1);
+              revealBorderBlock.apply(column - 1, row - 1);
+
+              // lowerow left corner
+          } else if (column == 0 && row== length - 1) {
+              // row current
+              revealBorderBlock.apply(column + 1, row+ 0);
+
+              // row above
+              revealBorderBlock.apply(column + 0, row- 1);
+              revealBorderBlock.apply(column + 1, row- 1);
+          } else if (column == 0) {
+              // row above
+              revealBorderBlock.apply(column + 0, row- 1);
+              revealBorderBlock.apply(column + 1, row - 1);
+
+              // row current
+              revealBorderBlock.apply(column + 1, row + 0);
+              
+              // row below
+              revealBorderBlock.apply(column + 0, row + 1);
+              revealBorderBlock.apply(column + 1, row + 1);
+          } else if (column == length - 1) {
+              // row above
+              revealBorderBlock.apply(column + 0, row - 1);
+              revealBorderBlock.apply(column - 1, row - 1);
+
+              // row current
+              revealBorderBlock.apply(column - 1, row + 0);
+              
+              // row below
+              revealBorderBlock.apply(column + 0, row + 1);
+              revealBorderBlock.apply(column - 1, row + 1);
+
+          // top row
+          } else if (row == 0) {
+              // column to the left
+              revealBorderBlock.apply(column - 1, row + 0);
+              revealBorderBlock.apply(column - 1, row + 1);
+
+              // column current
+              revealBorderBlock.apply(column + 0, row + 1);
+              
+              // column to the right
+              revealBorderBlock.apply(column + 1, row + 0);
+              revealBorderBlock.apply(column + 1, row + 1);
+          } else {
+              // column to the left
+              revealBorderBlock.apply(column - 1, row + 0);
+              revealBorderBlock.apply(column - 1, row - 1);
+
+              // column current
+              revealBorderBlock.apply(column + 0, row - 1);
+              
+              // column to the right
+              revealBorderBlock.apply(column + 1, row + 0);
+              revealBorderBlock.apply(column + 1, row - 1);
+          }
+          
+            return null;
+        };
+
         // up
         if ((r > 0) && isNotRevealedAndNotMineAndNotAdjacentToMines.apply(c, r - 1)) {
             Block block = getBlock(c, r - 1);
             
             block.reveal();
             revealRegion(c, r - 1);
+            revealAdjacentBorderBlocks.apply(c, r - 1);
         }
 
         // down
@@ -308,6 +415,7 @@ public class Grid implements UIElement {
             
             block.reveal();
             revealRegion(c, r + 1);
+            revealAdjacentBorderBlocks.apply(c, r + 1);
         }
 
         // // left
@@ -316,6 +424,7 @@ public class Grid implements UIElement {
             
             block.reveal();
             revealRegion(c - 1, r);
+            revealAdjacentBorderBlocks.apply(c - 1, r);
         }
 
         // // right
@@ -324,6 +433,7 @@ public class Grid implements UIElement {
             
             block.reveal();
             revealRegion(c + 1, r);
+            revealAdjacentBorderBlocks.apply(c + 1, r);
         }
         
         return;
