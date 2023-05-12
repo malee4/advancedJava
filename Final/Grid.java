@@ -4,6 +4,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
+import javafx.util.Pair;
+
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -74,14 +76,18 @@ public class Grid implements UIElement {
                     minesRemaining++;
                 }
 
-                // Block b = new Block(isMine, wasMine -> System.out.println("Clicked mine?: " + wasMine), level);
-                Block b = new Block(isMine, wasMine -> {
+                TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> handleClick = (wasMine, adjacentMines, location) -> {
                     System.out.println("Clicked mine?: " + wasMine); // for tracking purposes
                     Minesweeper.getGame().setMovesMade(Minesweeper.getGame().getMovesMade() + 1); // update the moves counter
                     if (wasMine) {
                         Minesweeper.getGame().gameOver();
-                    }
-                }, level);
+                    } else if (adjacentMines == 0)
+                        revealRegion(location.getKey(), location.getValue());
+
+                    return null;
+                };
+                // Block b = new Block(isMine, wasMine -> System.out.println("Clicked mine?: " + wasMine), level);
+                Block b = new Block(isMine, handleClick, level);
                 b.setAdjacentMines(-1);
 
                 // so the block "knows where it is"
@@ -243,8 +249,8 @@ public class Grid implements UIElement {
 
         // generate the grid of blocks
         grid = new GridPane();
-        grid.setVgap(5);
-        grid.setHgap(5);
+        // grid.setVgap(5);
+        // grid.setHgap(5);
         grid.setAlignment(Pos.CENTER);
 
         generateNew(type);
@@ -275,18 +281,60 @@ public class Grid implements UIElement {
 
     public Block getBlock(int c, int r) {
         int index = c * length + r;
+        // System.out.println(index);
         return blockCollection.get(index);
     }
 
     // uses DFS to reveal groups of regions that are NOT adjacent to mines
     public void revealRegion(int c, int r) {
+        // Block bl = getBlock(c, r);
+        // if (!bl.getIsMine() && (bl.getIsMine() == 0)) bl.reveal();
+        // int temp = c;
+        // c = r;
+        // r = temp;
+
+        System.out.println(c + " " + r);
+
+        BiFunction<Integer, Integer, Boolean> isNotRevealedAndNotMineAndNotAdjacentToMines = (column, row) -> {
+            Block block = getBlock(column, row);
+            System.out.println(block.isRevealed());
+            System.out.println(block.getIsMine());
+            System.out.println("adj mines " + block.getAdjacentMines());
+            return !block.isRevealed() && !block.getIsMine() && (block.getAdjacentMines() == 0);
+        };
+
         // up
+        if ((r > 0) && isNotRevealedAndNotMineAndNotAdjacentToMines.apply(c, r - 1)) {
+            Block block = getBlock(c, r - 1);
+            
+            block.reveal();
+            revealRegion(c, r - 1);
+        }
 
         // down
+        if ((r < length - 1) && isNotRevealedAndNotMineAndNotAdjacentToMines.apply(c, r + 1)) {
+            Block block = getBlock(c, r + 1);
+            
+            block.reveal();
+            revealRegion(c, r + 1);
+        }
 
-        // left
+        // // left
+        if ((c > 0) && isNotRevealedAndNotMineAndNotAdjacentToMines.apply(c - 1, r)) {
+            Block block = getBlock(c - 1, r);
+            
+            block.reveal();
+            revealRegion(c - 1, r);
+        }
 
-        // right
+        // // right
+        if ((c < length - 1) && isNotRevealedAndNotMineAndNotAdjacentToMines.apply(c + 1, r)) {
+            Block block = getBlock(c + 1, r);
+            
+            block.reveal();
+            revealRegion(c + 1, r);
+        }
+        
         return;
     }
 

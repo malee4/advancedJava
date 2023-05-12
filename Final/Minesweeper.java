@@ -23,6 +23,7 @@ public class Minesweeper extends Application {
         scene = new Scene(gameContainer, 800, 800);
         scene.getStylesheets().add("Final/Minesweeper.css");
         stage.setScene(scene);
+        stage.setTitle("Minesweeper");
         stage.show();
     }
 

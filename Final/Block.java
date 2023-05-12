@@ -18,7 +18,7 @@ public class Block implements UIElement {
 
     // Called when the block is clicked on and revealed.
     // Callback is called with true if the block is a mine, false if it is not.
-    private final Consumer<Boolean> onReveal;
+    private final TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> onReveal;
     private boolean revealed = false;
 
     private ImageView hiddenImage; // shown before the user clicks on the block
@@ -37,7 +37,7 @@ public class Block implements UIElement {
     private static final int MEDIUM_IMG_DIM = 10;
     private static final int HARD_IMG_DIM = 5;
 
-    public Block(boolean isMine, Consumer<Boolean> onReveal, Grid.Level level) {
+    public Block(boolean isMine, TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> onReveal, Grid.Level level) {
       this.isMine = isMine;
       this.onReveal = onReveal;
       
@@ -95,17 +95,25 @@ public class Block implements UIElement {
       } else {
         blockButton.getStyleClass().add("safe");
         /* TODO use DFS to reveal adjacent empty spaces */
-        if (adjacentMines != 0) {
-
-        }
+        // if (adjacentMines != 0) {
+          
+        // } 
       }
       revealed = true;
       currentImage.setImage(revealedImage.getImage());
-      onReveal.accept(isMine);
+      onReveal.apply(getIsMine(), adjacentMines, getLocation());
     }
 
     public boolean getIsMine() {
       return isMine;
+    }
+
+    public boolean isRevealed() {
+      return revealed;
+    }
+
+    public int getAdjacentMines() {
+      return adjacentMines;
     }
 
     public void setColumn(int i) {
@@ -117,7 +125,7 @@ public class Block implements UIElement {
     }
 
     public Pair<Integer, Integer> getLocation() {
-      return new Pair<>(r, c);
+      return new Pair<>(c, r);
     }
 
     public Node render() throws Exception {
