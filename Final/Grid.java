@@ -54,11 +54,11 @@ public class Grid implements UIElement {
         public double getProbability() {
             switch(this) {
                 case HARD:
-                    return 99.0 / 576.0;
+                    return 105.0 / 576.0;
                 case MEDIUM: 
-                    return 40.0 / 324.0;
+                    return 43.0 / 324.0;
                 default:
-                    return 10.0 / 100.0;
+                    return 13.0 / 100.0;
             }
         }
     }
@@ -78,7 +78,7 @@ public class Grid implements UIElement {
                 }
 
                 TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> handleClick = (wasMine, adjacentMines, location) -> {
-                    System.out.println("Clicked mine?: " + wasMine); // for tracking purposes
+                    // System.out.println("Clicked mine?: " + wasMine); // for tracking purposes
                     Minesweeper.getGame().setMovesMade(Minesweeper.getGame().getMovesMade() + 1); // update the moves counter
                     if (wasMine) {
                         Minesweeper.getGame().gameOver();

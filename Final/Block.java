@@ -11,6 +11,8 @@ import javafx.util.Pair;
 import java.io.*;
 import java.util.function.Consumer;
 
+import javafx.scene.input.MouseButton;
+
 public class Block implements UIElement {
     private final Button blockButton;
     // private final int WIDTH = 10;
@@ -24,6 +26,7 @@ public class Block implements UIElement {
     private ImageView hiddenImage; // shown before the user clicks on the block
     private ImageView revealedImage; // shown after the user clicks on the block
     private ImageView currentImage;
+    private ImageView flaggedImage;
     private final Label buttonLabel;
 
     private Integer adjacentMines;
@@ -49,7 +52,8 @@ public class Block implements UIElement {
 
       try {
         hiddenImage = new ImageView(new Image(new FileInputStream("./Final/assets/blank.png")));
-
+        flaggedImage = new ImageView(new Image(new FileInputStream("./Final/assets/flag.png")));
+        
         if (isMine)
           revealedImage = new ImageView(new Image(new FileInputStream("./Final/assets/mine.png")));
         else
@@ -76,7 +80,21 @@ public class Block implements UIElement {
       blockButton.setMinHeight(BUTTON_DIM);
       blockButton.setMaxHeight(BUTTON_DIM);
       
-      blockButton.setOnAction(e -> reveal());
+      // blockButton.setOnAction(e -> {
+      //   System.out.println(e.);
+      //   reveal();
+      // });
+      blockButton.setOnMouseClicked(e -> {
+        if (e.getButton() == MouseButton.PRIMARY) {
+          System.out.println("is primary button");
+          reveal();
+        }
+
+        if (e.getButton() == MouseButton.SECONDARY){
+          System.out.println("is secondary button");
+          placeFlag();
+        }
+      });
     }
 
     public int getImageDimensions(Grid.Level level) {
@@ -96,8 +114,6 @@ public class Block implements UIElement {
       if (revealed)
         return;
 
-      
-
       blockButton.getStyleClass().clear();
       if (isMine) {
         blockButton.getStyleClass().add("mine");
@@ -112,6 +128,10 @@ public class Block implements UIElement {
 
       Minesweeper.getGame().isGameWon();
 
+    }
+
+    public void placeFlag() {
+      currentImage.setImage(flaggedImage.getImage());
     }
 
     public void revealAdjacentMines() {

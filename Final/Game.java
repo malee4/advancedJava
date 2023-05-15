@@ -43,7 +43,7 @@ public class Game implements UIElement {
     }
 
     public void isGameWon() {
-        System.out.println("number mines: " + numberMines + " moves made: " + movesMade);
+        // System.out.println("number mines: " + numberMines + " moves made: " + movesMade);
         if (numberMines + movesMade == (int) Math.pow(grid.getLength(), 2)) 
             GameOverWindow.display("Game won");
     }
