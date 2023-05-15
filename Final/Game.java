@@ -18,11 +18,6 @@ public class Game implements UIElement {
 
     private boolean isWon;
 
-    // reads in game from file
-    public Game(String oldGame) throws Exception {
-        
-    }
-
     public Game(Grid.Level level) throws Exception {
         // create the grid
         grid = new Grid(level);

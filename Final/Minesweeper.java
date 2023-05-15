@@ -4,8 +4,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import javafx.util.Pair;
 
-import java.util.ArrayList;
+import java.util.*;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -63,8 +64,8 @@ public class Minesweeper extends Application {
 
         for (int i = 0; i < blockCollection.size();i++) {
             Block b = blockCollection.get(i);
-            out += "\n" + b.getIsMine();
-            out += "\t" + b.isRevealed();
+            out += "\n" + (b.getIsMine() ? 1 : 0);
+            out += "\t" + (b.isRevealed() ? 1 : 0);
             out += "\t" + b.getAdjacentMines();
         }
 
@@ -77,9 +78,35 @@ public class Minesweeper extends Application {
     }
 
     // read in a game from a file
-    public static void loadGame(String filePath) {
+    public static Pair<ArrayList<Block>, GridPane> loadGame(String filePath, TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> handleClick) {
         try {
             Path p = Paths.get(filePath);
+
+            List<String> lines = Files.readAllLines(p);
+
+            ArrayList<Block> blockCollection = new ArrayList<>();
+            GridPane grid = new GridPane();
+
+            int length = Integer.parseInt(lines.get(0));
+
+            for (int c = 0; c < length; c++) {
+                for (int r = 0; r < length; r++) {
+                    String[] blockInfo = lines.get(c * length + r).split(" ");
+                    boolean isMine = Integer.parseInt(blockInfo[0]) == 1;
+                    boolean isRevealed = Integer.parseInt(blockInfo[1]) == 1;
+                    int adjacentMines = Integer.parseInt(blockInfo[2]);
+
+                    Block block = new Block(isMine, handleClick, Level.EASY);
+                    if (isRevealed) // uhhh this isn't going to work well
+                        block.reveal();
+                    block.setAdjacentMines(adjacentMines);
+
+                    blockCollection.add(block);
+                    grid.add(block.render(), c, r); // column major order
+                }
+            }
+
+            return new Pair<ArrayList<Block>, GridPane>(blockCollection, grid);
         } catch (Exception e) {
             e.printStackTrace();
         }

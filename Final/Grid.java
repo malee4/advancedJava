@@ -41,7 +41,7 @@ public class Grid implements UIElement {
         public int getLength() {
             switch (this) {
                 case HARD:
-                    return 24;
+                    return 20;
                 case MEDIUM:
                     return 18;
                 case EASY:
@@ -54,7 +54,7 @@ public class Grid implements UIElement {
         public double getProbability() {
             switch(this) {
                 case HARD:
-                    return 105.0 / 576.0;
+                    return 90.0 / 400.0;
                 case MEDIUM: 
                     return 43.0 / 324.0;
                 default:
