@@ -110,6 +110,8 @@ public class Minesweeper extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        return null;
     }
 
     public static Grid getGrid() {
