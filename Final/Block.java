@@ -131,6 +131,8 @@ public class Block implements UIElement {
     }
 
     public void placeFlag() {
+      if (revealed) 
+        return;
       currentImage.setImage(flaggedImage.getImage());
     }
 

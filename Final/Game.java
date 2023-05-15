@@ -16,6 +16,13 @@ public class Game implements UIElement {
     private Button resetButton = new Button("Reset");
     private Menu menu = new Menu();
 
+    private boolean isWon;
+
+    // reads in game from file
+    public Game(String oldGame) throws Exception {
+        
+    }
+
     public Game(Grid.Level level) throws Exception {
         // create the grid
         grid = new Grid(level);

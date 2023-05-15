@@ -265,8 +265,8 @@ public class Grid implements UIElement {
         return length;
     }
 
-    public String getLevel() {
-        return level.toString();
+    public Grid.Level getLevel() {
+        return level;
     }
 
     public void setLevel(Level newLevel) throws Exception {
@@ -438,6 +438,10 @@ public class Grid implements UIElement {
         }
         
         return;
+    }
+
+    public ArrayList<Block> getBlockCollection() {
+        return blockCollection;
     }
 
     @Override
