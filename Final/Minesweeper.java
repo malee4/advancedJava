@@ -96,7 +96,7 @@ public class Minesweeper extends Application {
                     boolean isRevealed = Integer.parseInt(blockInfo[1]) == 1;
                     int adjacentMines = Integer.parseInt(blockInfo[2]);
 
-                    Block block = new Block(isMine, handleClick, Level.EASY);
+                    Block block = new Block(isMine, handleClick, Grid.Level.EASY);
                     if (isRevealed) // uhhh this isn't going to work well
                         block.reveal();
                     block.setAdjacentMines(adjacentMines);
