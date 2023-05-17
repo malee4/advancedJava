@@ -307,7 +307,7 @@ public class Grid implements UIElement {
         BiFunction<Integer, Integer, Void> revealBorderBlock = (column, row) -> {
           Block block = getBlock(column, row);
 
-          if (!block.isRevealed() && (block.getAdjacentMines() > 0))
+          if (!block.isRevealed() && (block.getAdjacentMines() >= 0))
             block.reveal();
 
           return null;

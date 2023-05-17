@@ -45,7 +45,7 @@ public class Block implements UIElement {
 
     private static final String SAFE_SOUND_FILE_PATH = "Final/assets/safeSound.wav";
     private static final String MINE_SOUND_FILE_PATH = "Final/assets/mineSound.wav";
-    private static final String FLAG_SOUND_FILE_PATH = "Final/assets/flagSound.wav";
+    private static final String FLAG_SOUND_FILE_PATH = "Final/assets/flagSound_2.wav";
 
     MediaPlayer player;
 
