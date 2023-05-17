@@ -43,7 +43,8 @@ public class Block implements UIElement {
     // Button dimension
     private static final int BUTTON_DIM = 30;
 
-    private static final String BOP_FILE_PATH = "Final/assets/bop.wav";
+    private static final String SAFE_SOUND_FILE_PATH = "Final/assets/safeSound.wav";
+    private static final String MINE_SOUND_FILE_PATH = "Final/assets/mineSound.wav";
 
     MediaPlayer player;
 
@@ -54,17 +55,21 @@ public class Block implements UIElement {
       blockButton = new Button("");
       blockButton.getStyleClass().add("block");
 
-      Media sound = new Media(new File(BOP_FILE_PATH).toURI().toString());
-      this.player = new MediaPlayer(sound);
-
+      
       try {
         hiddenImage = new ImageView(new Image(new FileInputStream("./Final/assets/blank.png")));
         flaggedImage = new ImageView(new Image(new FileInputStream("./Final/assets/flag.png")));
         
-        if (isMine)
+        if (isMine) {
+          Media sound = new Media(new File(MINE_SOUND_FILE_PATH).toURI().toString());
+          this.player = new MediaPlayer(sound);
           revealedImage = new ImageView(new Image(new FileInputStream("./Final/assets/mine.png")));
-        else
+        }
+        else {
+          Media sound = new Media(new File(SAFE_SOUND_FILE_PATH).toURI().toString());
+          this.player = new MediaPlayer(sound);
           revealedImage = new ImageView(new Image(new FileInputStream("./Final/assets/safe.png")));
+        }
         
       } catch (IOException e) {
         System.out.println("Error loading block image assets: " + e);
