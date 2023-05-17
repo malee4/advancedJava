@@ -45,8 +45,11 @@ public class Block implements UIElement {
 
     private static final String SAFE_SOUND_FILE_PATH = "Final/assets/safeSound.wav";
     private static final String MINE_SOUND_FILE_PATH = "Final/assets/mineSound.wav";
+    private static final String FLAG_SOUND_FILE_PATH = "Final/assets/flagSound.wav";
 
     MediaPlayer player;
+
+    private static final MediaPlayer FLAG_SOUND = new MediaPlayer(new Media(new File(FLAG_SOUND_FILE_PATH).toURI().toString()));
 
     public Block(boolean isMine, TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> onReveal, Grid.Level level) {
       this.isMine = isMine;
@@ -99,6 +102,7 @@ public class Block implements UIElement {
         }
 
         if (e.getButton() == MouseButton.SECONDARY){
+          FLAG_SOUND.play();
           placeFlag();
         }
       });
