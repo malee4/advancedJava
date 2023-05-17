@@ -2,14 +2,12 @@ package Final;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.image.*;
 import javafx.scene.layout.StackPane;
 import javafx.util.Pair;
 
 import java.io.*;
-import java.util.function.Consumer;
 
 import javafx.scene.input.MouseButton;
 
@@ -20,7 +18,7 @@ public class Block implements UIElement {
 
     // Called when the block is clicked on and revealed.
     // Callback is called with true if the block is a mine, false if it is not.
-    private final TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> onReveal;
+    private TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> onReveal;
     private boolean revealed = false;
 
     private ImageView hiddenImage; // shown before the user clicks on the block
@@ -80,21 +78,76 @@ public class Block implements UIElement {
       blockButton.setMinHeight(BUTTON_DIM);
       blockButton.setMaxHeight(BUTTON_DIM);
       
-      // blockButton.setOnAction(e -> {
-      //   System.out.println(e.);
-      //   reveal();
-      // });
       blockButton.setOnMouseClicked(e -> {
         if (e.getButton() == MouseButton.PRIMARY) {
-          System.out.println("is primary button");
           reveal();
         }
 
         if (e.getButton() == MouseButton.SECONDARY){
-          System.out.println("is secondary button");
           placeFlag();
         }
       });
+    }
+
+    public Block(boolean isMine, boolean isRevealed, int adjacentMines, TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> onReveal, Grid.Level level) {
+      this.isMine = isMine;
+      this.onReveal = onReveal;
+      this.revealed = isRevealed;
+      this.adjacentMines = adjacentMines;
+      
+      blockButton = new Button("");
+      blockButton.getStyleClass().add("block");
+
+      try {
+        hiddenImage = new ImageView(new Image(new FileInputStream("./Final/assets/blank.png")));
+        flaggedImage = new ImageView(new Image(new FileInputStream("./Final/assets/flag.png")));
+        
+        if (isMine)
+          revealedImage = new ImageView(new Image(new FileInputStream("./Final/assets/mine.png")));
+        else
+          revealedImage = new ImageView(new Image(new FileInputStream("./Final/assets/safe.png")));
+        
+      } catch (IOException e) {
+        System.out.println("Error loading block image assets: " + e);
+        System.exit(0);
+      }
+
+      currentImage = new ImageView(revealed ? revealedImage.getImage() : hiddenImage.getImage());
+
+      // adjust the dimensions of the image
+      int imgDim = getImageDimensions(level);
+      currentImage.setFitHeight(imgDim);
+      currentImage.setFitWidth(imgDim);
+
+      buttonLabel = new Label("");
+      StackPane buttonPane = new StackPane(currentImage, buttonLabel);
+
+      blockButton.setGraphic(buttonPane);
+      blockButton.setMinWidth(BUTTON_DIM);
+      blockButton.setMaxWidth(BUTTON_DIM);
+      blockButton.setMinHeight(BUTTON_DIM);
+      blockButton.setMaxHeight(BUTTON_DIM);
+      
+      blockButton.setOnMouseClicked(e -> {
+        if (e.getButton() == MouseButton.PRIMARY) {
+          reveal();
+        }
+
+        if (e.getButton() == MouseButton.SECONDARY){
+          placeFlag();
+        }
+      });
+
+      if (revealed) {
+        blockButton.getStyleClass().clear();
+        if (isMine) {
+          blockButton.getStyleClass().add("mine");
+        } else {
+          blockButton.getStyleClass().add("safe");
+        }
+
+        revealAdjacentMines();
+      }
     }
 
     public int getImageDimensions(Grid.Level level) {
@@ -105,6 +158,10 @@ public class Block implements UIElement {
     
     public void setAdjacentMines(int adjacentMines) {
       this.adjacentMines = adjacentMines;
+    }
+
+    public void setOnReveal(TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> onReveal) {
+      this.onReveal = onReveal;
     }
 
     // Reveals the block, showing whether or not it is a mine or an empty square.
@@ -120,6 +177,7 @@ public class Block implements UIElement {
       } else {
         blockButton.getStyleClass().add("safe");
       }
+      
       revealed = true;
 
       revealAdjacentMines();

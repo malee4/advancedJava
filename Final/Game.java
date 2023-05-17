@@ -2,7 +2,9 @@ package Final;
 
 import javafx.scene.Node;
 import javafx.scene.layout.*;
+import java.util.*;
 import javafx.scene.control.*;
+
 import javafx.geometry.Pos;
 
 public class Game implements UIElement {
@@ -16,12 +18,14 @@ public class Game implements UIElement {
     private Button resetButton = new Button("Reset");
     private Menu menu = new Menu();
 
-    private boolean isWon;
-
     public Game(Grid.Level level) throws Exception {
         // create the grid
         grid = new Grid(level);
         numberMines = grid.getMinesRemaining();
+        buildUi(grid);
+    }
+
+    public void buildUi(Grid grid) {
         resetButton.setAlignment(Pos.CENTER);
         resetButton.setOnAction(e-> {
             try {
@@ -40,12 +44,12 @@ public class Game implements UIElement {
         bottomMenu.getChildren().addAll(movesMadeLabel, resetButton, help);
         bottomMenu.setAlignment(Pos.CENTER);
 
+        container.getChildren().clear();
         container.getChildren().addAll(menu.getHorizontal(), grid.render(), bottomMenu);
         container.setAlignment(Pos.CENTER);
     }
 
     public void isGameWon() {
-        // System.out.println("number mines: " + numberMines + " moves made: " + movesMade);
         if (numberMines + movesMade == (int) Math.pow(grid.getLength(), 2)) 
             GameOverWindow.display("Game won");
     }
@@ -73,6 +77,18 @@ public class Game implements UIElement {
         menu.getLevelSelector().setText("Easy");
         setMovesMade(0);
         return;
+    }
+
+    // will start a new game
+    public void loadGame(Grid.Level level, ArrayList<Block> blocks, GridPane gp, int moves) throws Exception {
+        // generates new grid at set level, and sets its blockCollection accordingly
+        grid = new Grid(level, gp, blocks);
+        menu.getLevelSelector().setText(level.toString());
+
+        // sets the moves made
+        setMovesMade(moves);
+
+        buildUi(grid);
     }
 
     public Grid getGrid() {

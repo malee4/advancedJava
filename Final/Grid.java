@@ -63,6 +63,16 @@ public class Grid implements UIElement {
         }
     }
 
+    public TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> onReveal = (wasMine, adjacentMines, location) -> {
+        Minesweeper.getGame().setMovesMade(Minesweeper.getGame().getMovesMade() + 1); // update the moves counter
+        if (wasMine) {
+            Minesweeper.getGame().gameOver();
+        } else if (adjacentMines == 0)
+            revealRegion(location.getKey(), location.getValue());
+
+        return null;
+    };
+
     public void generateNew(Level level) throws Exception {
         // clear existing storage
         grid.getChildren().clear();
@@ -77,18 +87,7 @@ public class Grid implements UIElement {
                     minesRemaining++;
                 }
 
-                TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> handleClick = (wasMine, adjacentMines, location) -> {
-                    // System.out.println("Clicked mine?: " + wasMine); // for tracking purposes
-                    Minesweeper.getGame().setMovesMade(Minesweeper.getGame().getMovesMade() + 1); // update the moves counter
-                    if (wasMine) {
-                        Minesweeper.getGame().gameOver();
-                    } else if (adjacentMines == 0)
-                        revealRegion(location.getKey(), location.getValue());
-
-                    return null;
-                };
-                // Block b = new Block(isMine, wasMine -> System.out.println("Clicked mine?: " + wasMine), level);
-                Block b = new Block(isMine, handleClick, level);
+                Block b = new Block(isMine, onReveal, level);
                 b.setAdjacentMines(-1);
 
                 // so the block "knows where it is"
@@ -250,11 +249,24 @@ public class Grid implements UIElement {
 
         // generate the grid of blocks
         grid = new GridPane();
-        // grid.setVgap(5);
-        // grid.setHgap(5);
         grid.setAlignment(Pos.CENTER);
 
         generateNew(type);
+    }
+
+    public Grid(Level type, GridPane grid, ArrayList<Block> blockCollection) {
+        this.length = type.getLength();
+        this.p = type.getProbability();
+        this.level = type;
+
+        this.grid = grid;
+        grid.setAlignment(Pos.CENTER);
+
+        this.blockCollection = blockCollection;   
+
+        for (Block block : blockCollection) {
+            block.setOnReveal(onReveal);
+        }     
     }
 
     public int getMinesRemaining() {
@@ -282,14 +294,11 @@ public class Grid implements UIElement {
 
     public Block getBlock(int c, int r) {
         int index = c * length + r;
-        // System.out.println(index);
         return blockCollection.get(index);
     }
 
     // uses DFS to reveal groups of regions that are NOT adjacent to mines
     public void revealRegion(int c, int r) {
-        // System.out.println(c + " " + r);
-
         BiFunction<Integer, Integer, Boolean> isNotRevealedAndNotMineAndNotAdjacentToMines = (column, row) -> {
             Block block = getBlock(column, row);
             return !block.isRevealed() && !block.getIsMine() && (block.getAdjacentMines() == 0);
@@ -428,7 +437,7 @@ public class Grid implements UIElement {
             revealAdjacentBorderBlocks.apply(c - 1, r);
         }
 
-        // // right
+        // right
         if ((c < length - 1) && isNotRevealedAndNotMineAndNotAdjacentToMines.apply(c + 1, r)) {
             Block block = getBlock(c + 1, r);
             

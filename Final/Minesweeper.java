@@ -12,7 +12,6 @@ import javafx.application.Application;
 import javafx.geometry.Pos;
 
 import java.nio.file.*;
-import java.io.*;
 
 public class Minesweeper extends Application {
     private static Game game;
@@ -23,6 +22,8 @@ public class Minesweeper extends Application {
     private static Button saveGame = new Button("Save Game");
     private static Button loadGame = new Button("Load Game");
 
+    private static String saveFilePath = "Final/gameArchive/save.txt";
+
     public void start(Stage primaryStage) throws Exception {
         game = new Game(Grid.Level.EASY);
         gameContainer = new VBox(game.render());
@@ -30,7 +31,10 @@ public class Minesweeper extends Application {
 
         gameContainer.setAlignment(Pos.CENTER);
 
-        saveGame.setOnAction(e -> saveGame("Final/gameArchive/save.txt"));
+        saveGame.setOnAction(e -> saveGameFile(saveFilePath));
+        loadGame.setOnAction(e -> {
+            loadGameFile(saveFilePath); 
+        });
 
         HBox gameControls = new HBox(50);
         gameControls.setAlignment(Pos.CENTER);
@@ -55,12 +59,13 @@ public class Minesweeper extends Application {
      * 
      * Written in column major order
      */
-    public static void saveGame(String filePath) {
+    public static void saveGameFile(String filePath) {
         Grid g = game.getGrid();
         ArrayList<Block> blockCollection = g.getBlockCollection();
 
         // write the string
         String out = "" + g.getLevel().getLength();
+        out += "\n" + game.getMovesMade();
 
         for (int i = 0; i < blockCollection.size();i++) {
             Block b = blockCollection.get(i);
@@ -78,7 +83,7 @@ public class Minesweeper extends Application {
     }
 
     // read in a game from a file
-    public static Pair<ArrayList<Block>, GridPane> loadGame(String filePath, TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> handleClick) {
+    public static void loadGameFile(String filePath) {
         try {
             Path p = Paths.get(filePath);
 
@@ -88,30 +93,32 @@ public class Minesweeper extends Application {
             GridPane grid = new GridPane();
 
             int length = Integer.parseInt(lines.get(0));
+            Grid.Level level = length == 10 ? Grid.Level.EASY : length == 18 ? Grid.Level.MEDIUM : Grid.Level.HARD;
+            int movesMade = Integer.parseInt(lines.get(1));
+            // int movesMade = 0;
+            // System.out.println(lines.get(0));
+            // System.out.println(lines.get(1));
+            // System.out.println(lines.get(2));
 
             for (int c = 0; c < length; c++) {
                 for (int r = 0; r < length; r++) {
-                    String[] blockInfo = lines.get(c * length + r).split(" ");
+                    // System.out.println("Block " + (c * length + r + 2) + ": " + lines.get(c * length + r + 2));
+                    String[] blockInfo = lines.get(c * length + r + 2).split("\t");
                     boolean isMine = Integer.parseInt(blockInfo[0]) == 1;
                     boolean isRevealed = Integer.parseInt(blockInfo[1]) == 1;
+                        
                     int adjacentMines = Integer.parseInt(blockInfo[2]);
 
-                    Block block = new Block(isMine, handleClick, Grid.Level.EASY);
-                    if (isRevealed) // uhhh this isn't going to work well
-                        block.reveal();
-                    block.setAdjacentMines(adjacentMines);
-
+                    Block block = new Block(isMine, isRevealed, adjacentMines, null, level);
                     blockCollection.add(block);
                     grid.add(block.render(), c, r); // column major order
                 }
             }
 
-            return new Pair<ArrayList<Block>, GridPane>(blockCollection, grid);
+            game.loadGame(level, blockCollection, grid, movesMade);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return null;
     }
 
     public static Grid getGrid() {
