@@ -2,6 +2,10 @@ package Final;
 
 import javafx.scene.Node;
 import javafx.scene.layout.*;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+
+import java.io.File;
 import java.util.*;
 import javafx.scene.control.*;
 
@@ -17,6 +21,8 @@ public class Game implements UIElement {
 
     private Button resetButton = new Button("Reset");
     private Menu menu = new Menu();
+
+    private static final String WON_SOUND_FILE_PATH = "Final/assets/winSound.wav";
 
     public Game(Grid.Level level) throws Exception {
         // create the grid
@@ -50,8 +56,13 @@ public class Game implements UIElement {
     }
 
     public void isGameWon() {
-        if (numberMines + movesMade == (int) Math.pow(grid.getLength(), 2)) 
+        if (numberMines + movesMade == (int) Math.pow(grid.getLength(), 2)) {
+            Media sound = new Media(new File(WON_SOUND_FILE_PATH).toURI().toString());
+            MediaPlayer wonSound = new MediaPlayer(sound);
+            wonSound.play();
             GameOverWindow.display("Game won");
+        }
+            
     }
 
     // when game over, will open screen indicating the game has ended
