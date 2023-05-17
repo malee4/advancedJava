@@ -187,8 +187,12 @@ public class Block implements UIElement {
     // It returns a boolean that is true if the block is a mine and false if the block is empty.
     public void reveal() {
       // Return if block was already revealed
-      if (revealed)
-        return;
+      if (revealed) {
+        System.out.println("revealing block more than once" + this.c + this.r);
+        return; 
+      }
+
+      Minesweeper.getGame().setMovesMade(Minesweeper.getGame().getMovesMade() + 1);
 
       blockButton.getStyleClass().clear();
       if (isMine) {

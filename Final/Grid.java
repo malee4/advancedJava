@@ -64,7 +64,7 @@ public class Grid implements UIElement {
     }
 
     public TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> onReveal = (wasMine, adjacentMines, location) -> {
-        Minesweeper.getGame().setMovesMade(Minesweeper.getGame().getMovesMade() + 1); // update the moves counter
+        // Minesweeper.getGame().setMovesMade(Minesweeper.getGame().getMovesMade() + 1); // update the moves counter
         if (wasMine) {
             Minesweeper.getGame().gameOver();
         } else if (adjacentMines == 0)
@@ -77,6 +77,7 @@ public class Grid implements UIElement {
         // clear existing storage
         grid.getChildren().clear();
         this.blockCollection.clear();
+        this.minesRemaining = 0;
         this.length = level.getLength();
 
         for (int c = 0; c < length; c++) {
@@ -307,7 +308,7 @@ public class Grid implements UIElement {
         BiFunction<Integer, Integer, Void> revealBorderBlock = (column, row) -> {
           Block block = getBlock(column, row);
 
-          if (!block.isRevealed() && (block.getAdjacentMines() >= 0))
+          if (!block.isRevealed() && !(block.getAdjacentMines() == 0))
             block.reveal();
 
           return null;

@@ -87,6 +87,7 @@ public class Game implements UIElement {
         grid.generateNew(Grid.Level.EASY);
         menu.getLevelSelector().setText("Easy");
         setMovesMade(0);
+        numberMines = grid.getMinesRemaining();
         return;
     }
 
@@ -95,6 +96,7 @@ public class Game implements UIElement {
         // generates new grid at set level, and sets its blockCollection accordingly
         grid = new Grid(level, gp, blocks);
         menu.getLevelSelector().setText(level.toString());
+        numberMines = grid.getMinesRemaining();
 
         // sets the moves made
         setMovesMade(moves);
