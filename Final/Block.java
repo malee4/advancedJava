@@ -5,6 +5,8 @@ import javafx.scene.control.Label;
 import javafx.scene.Node;
 import javafx.scene.image.*;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Pair;
 
 import java.io.*;
@@ -41,12 +43,19 @@ public class Block implements UIElement {
     // Button dimension
     private static final int BUTTON_DIM = 30;
 
+    private static final String BOP_FILE_PATH = "Final/assets/bop.wav";
+
+    MediaPlayer player;
+
     public Block(boolean isMine, TriFunction<Boolean, Integer, Pair<Integer, Integer>, Void> onReveal, Grid.Level level) {
       this.isMine = isMine;
       this.onReveal = onReveal;
       
       blockButton = new Button("");
       blockButton.getStyleClass().add("block");
+
+      Media sound = new Media(new File(BOP_FILE_PATH).toURI().toString());
+      this.player = new MediaPlayer(sound);
 
       try {
         hiddenImage = new ImageView(new Image(new FileInputStream("./Final/assets/blank.png")));
@@ -80,6 +89,7 @@ public class Block implements UIElement {
       
       blockButton.setOnMouseClicked(e -> {
         if (e.getButton() == MouseButton.PRIMARY) {
+          player.play();
           reveal();
         }
 
