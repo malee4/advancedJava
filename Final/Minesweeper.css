@@ -3,31 +3,28 @@
   font-family: Gill Sans, sans-serif;
 }
 
+/*
+* formatting for an unrevealed block
+*/
 .block {
-  /* -fx-padding: 5; */
   -fx-margin: 0;
   -fx-background-color: #d9d9d9;
   -fx-border-color: #b9b9b9;
   -fx-border-width: 1;
-  /* -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.8), 5, 0, 0, 0); */
 }
 
+/*
+* formatting for a revealed mine
+*/
 .mine {
-  /* -fx-padding: 5; */
   -fx-background-color: #ff5757;
   -fx-effect: dropshadow(two-pass-box, rgba(0, 0, 0, 0.8), 5, 0, 0, 0);
 }
 
+/*
+* formatting for a revealed block that is not a mine
+*/
 .safe {
-  /* -fx-padding: 5; */
   -fx-background-color: #acacac;
   -fx-effect: dropshadow(two-pass-box, rgba(0, 0, 0, 0.8), 5, 0, 0, 0);
-}
-
-/* adjust for padding */
-.grid {
-}
-
-/* for controls buttons */
-.button {
 }
