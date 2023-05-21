@@ -255,10 +255,11 @@ public class Grid implements UIElement {
         generateNew(type);
     }
 
-    public Grid(Level type, GridPane grid, ArrayList<Block> blockCollection) {
+    public Grid(Level type, GridPane grid, ArrayList<Block> blockCollection, int mines) {
         this.length = type.getLength();
         this.p = type.getProbability();
         this.level = type;
+        this.minesRemaining = mines;
 
         this.grid = grid;
         grid.setAlignment(Pos.CENTER);

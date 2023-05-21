@@ -92,9 +92,9 @@ public class Game implements UIElement {
     }
 
     // will start a new game
-    public void loadGame(Grid.Level level, ArrayList<Block> blocks, GridPane gp, int moves) throws Exception {
+    public void loadGame(Grid.Level level, ArrayList<Block> blocks, GridPane gp, int moves, int mines) throws Exception {
         // generates new grid at set level, and sets its blockCollection accordingly
-        grid = new Grid(level, gp, blocks);
+        grid = new Grid(level, gp, blocks, mines);
         menu.getLevelSelector().setText(level.toString());
         numberMines = grid.getMinesRemaining();
 
@@ -111,5 +111,9 @@ public class Game implements UIElement {
     @Override 
     public Node render() {
         return container;
+    }
+
+    public int getNumberMines() {
+      return numberMines;
     }
 }

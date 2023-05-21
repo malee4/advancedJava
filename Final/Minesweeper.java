@@ -66,6 +66,7 @@ public class Minesweeper extends Application {
         // write the string
         String out = "" + g.getLevel().getLength();
         out += "\n" + game.getMovesMade();
+        out += "\n" + game.getNumberMines();
 
         for (int i = 0; i < blockCollection.size();i++) {
             Block b = blockCollection.get(i);
@@ -95,6 +96,7 @@ public class Minesweeper extends Application {
             int length = Integer.parseInt(lines.get(0));
             Grid.Level level = length == 10 ? Grid.Level.EASY : length == 18 ? Grid.Level.MEDIUM : Grid.Level.HARD;
             int movesMade = Integer.parseInt(lines.get(1));
+            int mines = Integer.parseInt(lines.get(2));
             // int movesMade = 0;
             // System.out.println(lines.get(0));
             // System.out.println(lines.get(1));
@@ -103,7 +105,7 @@ public class Minesweeper extends Application {
             for (int c = 0; c < length; c++) {
                 for (int r = 0; r < length; r++) {
                     // System.out.println("Block " + (c * length + r + 2) + ": " + lines.get(c * length + r + 2));
-                    String[] blockInfo = lines.get(c * length + r + 2).split("\t");
+                    String[] blockInfo = lines.get(c * length + r + 3).split("\t");
                     boolean isMine = Integer.parseInt(blockInfo[0]) == 1;
                     boolean isRevealed = Integer.parseInt(blockInfo[1]) == 1;
                         
@@ -115,7 +117,7 @@ public class Minesweeper extends Application {
                 }
             }
 
-            game.loadGame(level, blockCollection, grid, movesMade);
+            game.loadGame(level, blockCollection, grid, movesMade, mines);
         } catch (Exception e) {
             e.printStackTrace();
         }
